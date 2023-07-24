@@ -1,50 +1,48 @@
-// use this to decode a token and get the user's information out of it
 import decode from 'jwt-decode';
 
-// create a new class to instantiate for a user
 class AuthService {
-  // get user data
   getProfile() {
+    // Retrieve data saved in token
     return decode(this.getToken());
   }
 
-  // check if user's logged in
   loggedIn() {
-    // Checks if there is a saved token and it's still valid
+    // Check if the user is still logged in
     const token = this.getToken();
-    return !!token && !this.isTokenExpired(token); // handwaiving here
+    // Use type coercion to check if token is NOT undefined and the token is NOT expired
+    return !!token && !this.isTokenExpired(token);
   }
 
-  // check if token is expired
   isTokenExpired(token) {
+    // Check if the token has expired
     try {
       const decoded = decode(token);
-      if (decoded.exp < Date.now() / 1000) {
-        return true;
-      } else return false;
+      return decoded.exp < Date.now() / 1000;
     } catch (err) {
       return false;
     }
   }
 
   getToken() {
-    // Retrieves the user token from localStorage
+    // Retrieve token from localStorage
     return localStorage.getItem('id_token');
   }
 
   login(idToken) {
-    // Saves user token to localStorage
+    // Set token to localStorage and reload page to homepage
     localStorage.setItem('id_token', idToken);
     window.location.assign('/');
   }
 
   logout() {
-    // Clear user token and profile data from localStorage
+    // Clear token from localStorage and force logout with reload
     localStorage.removeItem('id_token');
-    // this will reload the page and reset the state of the application
+    localStorage.removeItem('saved_books');
+    // This will reload the page and reset the state of the application
     window.location.assign('/');
   }
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default new AuthService();
+const authService = new AuthService();
+
+export default authService;
