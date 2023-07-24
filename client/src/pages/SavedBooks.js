@@ -1,18 +1,19 @@
 import React from 'react';
-import { Container, Card, Button } from 'react-bootstrap';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import { GET_ME } from '../utils/query';
-import { REMOVE_BOOK } from '../utils/mutation';
+import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
+import { useQuery, useMutation } from '@apollo/client';
+import { REMOVE_BOOK } from '../utils/mutations';
+import { GET_ME } from '../utils/queries';
 
 const SavedBooks = () => {
+  // Fetch user data and manage state with useQuery
   const { loading, data } = useQuery(GET_ME);
-  const [removeBook] = useMutation(REMOVE_BOOK);
+  const [removeBook, { error }] = useMutation(REMOVE_BOOK);
 
-  const userData = data?.me || [];
+  const userData = data?.me || {};
 
-  // Function to handle deleting a book
+  // Function to delete a book from the database and localStorage
   const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -21,28 +22,33 @@ const SavedBooks = () => {
     }
 
     try {
-      await removeBook({
-        variables: { bookId },
-      });
+      const response = await removeBook({ variables: { bookId } });
+      console.log('Deleted record: ', response);
+      
+      if (error) {
+        console.log(error);
+      }
 
-      removeBookId(bookId); // Remove book's id from localStorage upon success
+      // Remove the book from LocalStorage
+      removeBookId(bookId);
     } catch (err) {
+      // Display any caught errors here
       console.error(err);
     }
   };
 
-  // Render loading message while data is being fetched
+  // Show a loading message if data isn't available yet
   if (loading) {
     return <h2>LOADING...</h2>;
   }
 
   return (
     <>
-      <header className='text-light bg-dark py-5'>
+      <Jumbotron fluid className='text-light bg-dark'>
         <Container>
           <h1>Viewing saved books!</h1>
         </Container>
-      </header>
+      </Jumbotron>
       <Container>
         <h2>
           {userData.savedBooks.length
@@ -51,23 +57,23 @@ const SavedBooks = () => {
               }:`
             : 'You have no saved books!'}
         </h2>
-        <div className='d-flex flex-wrap justify-content-center'>
-          {userData.savedBooks.map((book) => (
-            <Card key={book.bookId} border='dark' style={{ width: '18rem', margin: '10px' }}>
-              {book.image && (
-                <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' />
-              )}
-              <Card.Body>
-                <Card.Title>{book.title}</Card.Title>
-                <p className='small'>Authors: {book.authors}</p>
-                <Card.Text>{book.description}</Card.Text>
-                <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book.bookId)}>
-                  Delete this Book!
-                </Button>
-              </Card.Body>
-            </Card>
-          ))}
-        </div>
+        <CardColumns>
+          {userData.savedBooks.map((book) => {
+            return (
+              <Card key={book.bookId} border='dark'>
+                {book.image ? <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' /> : null}
+                <Card.Body>
+                  <Card.Title>{book.title}</Card.Title>
+                  <p className='small'>Authors: {book.authors}</p>
+                  <Card.Text>{book.description}</Card.Text>
+                  <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book.bookId)}>
+                    Delete this Book!
+                  </Button>
+                </Card.Body>
+              </Card>
+            );
+          })}
+        </CardColumns>
       </Container>
     </>
   );

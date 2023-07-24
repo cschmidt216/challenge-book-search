@@ -1,19 +1,23 @@
-import { gql } from 'graphql-tag';
+import { gql } from '@apollo/client';
 
+// Mutation to handle user login
 export const LOGIN_USER = gql`
-  mutation loginUser($email: String!, $password: String!) {
+  mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
       user {
         _id
+        username
       }
     }
   }
 `;
 
+// Mutation to handle adding a new user
 export const ADD_USER = gql`
-  mutation addUser($username: String!, $password: String!, $email: String!) {
-    addUser(username: $username, password: $password, email: $email) {
+  mutation addUser($username: String!, $email: String!, $password: String!) {
+    addUser(username: $username, email: $email, password: $password) {
+      token
       user {
         _id
         username
@@ -28,43 +32,43 @@ export const ADD_USER = gql`
           description
         }
       }
-      token
     }
   }
 `;
 
-const BOOK_FIELDS = `
-  bookId
-  authors
-  image
-  link
-  title
-  description
-`;
-
+// Mutation to handle saving a book
 export const SAVE_BOOK = gql`
-  mutation saveBook($input: savedBook!) {
-    saveBook(input: $input) {
+  mutation saveBook($newBook: InputBook!) {
+    saveBook(newBook: $newBook) {
       _id
       username
       email
-      bookCount
       savedBooks {
-        ${BOOK_FIELDS}
+        bookId
+        authors
+        description
+        title
+        image
+        link
       }
     }
   }
 `;
 
+// Mutation to handle removing a saved book
 export const REMOVE_BOOK = gql`
   mutation removeBook($bookId: ID!) {
     removeBook(bookId: $bookId) {
       _id
       username
       email
-      bookCount
       savedBooks {
-        ${BOOK_FIELDS}
+        bookId
+        authors
+        description
+        title
+        image
+        link
       }
     }
   }

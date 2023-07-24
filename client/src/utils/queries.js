@@ -1,7 +1,9 @@
-import { gql } from 'graphql-tag';
+import { gql } from '@apollo/client';
 
+// Query to get the user's data and saved book data
+// Used in 'SavedBooks.js' component
 export const GET_ME = gql`
-  query getMe {
+  {
     me {
       _id
       username
@@ -10,10 +12,10 @@ export const GET_ME = gql`
       savedBooks {
         bookId
         authors
+        description
+        title
         image
         link
-        title
-        description
       }
     }
   }
