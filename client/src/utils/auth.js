@@ -10,6 +10,7 @@ class AuthService {
     // Check if the user is still logged in
     const token = this.getToken();
     // Use type coercion to check if token is NOT undefined and the token is NOT expired
+    console.log(token);
     return !!token && !this.isTokenExpired(token);
   }
 
