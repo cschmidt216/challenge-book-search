@@ -1,10 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useApolloClient } from '@apollo/client/react/hooks/useApolloClient.js'; // Import useApolloClient
 import SearchBooks from './pages/SearchBooks';
 import SavedBooks from './pages/SavedBooks';
 import Navbar from './components/Navbar';
 
 function App() {
+  const client = useApolloClient(); // Access Apollo Client instance here
+
   return (
     <Router>
       <>
