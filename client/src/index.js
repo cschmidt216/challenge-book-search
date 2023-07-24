@@ -8,7 +8,7 @@ import App from './App';
 
 // Create an ApolloClient instance
 const client = new ApolloClient({
-  uri: 'http://localhost:3001/graphql', 
+  uri: 'https://serene-dusk-48581-595086ab6dc3.herokuapp.com/graphql', 
   cache: new InMemoryCache(),
 });
 
