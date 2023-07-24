@@ -1,9 +1,6 @@
 {
     "name": "book-app",
     "version": "1.0.0",
-    "engines": {
-        "node": "16.20.1"
-    },
     "description": "",
     "main": "server/server.js",
     "scripts": {
@@ -23,6 +20,8 @@
     },
     "devDependencies": {
         "@testing-library/react": "^12.1.5",
+        "@types/react": "^18.2.15",
+        "@types/react-dom": "^18.2.7",
         "concurrently": "^5.1.0"
     }
 }
