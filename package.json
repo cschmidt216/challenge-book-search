@@ -16,6 +16,7 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
+        "apollo-boost": "^0.4.9",
         "apollo-client": "^2.6.10",
         "apollo-server-express": "^3.12.0",
         "graphql": "^15.5.2",
