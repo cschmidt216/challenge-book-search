@@ -1,10 +1,10 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import SearchBooks from "./pages/SearchBooks";
-import SavedBooks from "./pages/SavedBooks";
-import Navbar from "./components/Navbar";
-import { ApolloProvider } from "@apollo/react-hooks";
-import ApolloClient from "apollo-boost";
+const React = require("react");
+const { BrowserRouter: Router, Routes, Route } = require("react-router-dom");
+const SearchBooks = require("./pages/SearchBooks");
+const SavedBooks = require("./pages/SavedBooks");
+const Navbar = require("./components/Navbar");
+const { ApolloProvider } = require("@apollo/react-hooks");
+const ApolloClient = require("apollo-boost");
 
 const client = new ApolloClient({
   request: (operation) => {
