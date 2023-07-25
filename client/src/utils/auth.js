@@ -33,5 +33,6 @@ class AuthService {
     window.location.assign('/');
   }
 }
-const Auth = new AuthService();
-export default Auth();
+
+// eslint-disable-next-line import/no-anonymous-default-export
+export default new AuthService();
